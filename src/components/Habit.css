@@ -1,0 +1,14 @@
+.habit {
+  display: flex;
+  border: 1px solid black;
+}
+.dates {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  grid-template-rows: 50px 50px;
+  border: 1px solid black;
+}
+.date {
+  border: 1px solid black;
+  padding: 5px;
+}
