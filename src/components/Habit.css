@@ -7,8 +7,12 @@
   grid-template-columns: repeat(16, 1fr);
   grid-template-rows: 50px 50px;
   border: 1px solid black;
+  cursor: pointer;
 }
 .date {
   border: 1px solid black;
   padding: 5px;
+}
+.checked {
+  background: green;
 }
