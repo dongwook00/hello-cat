@@ -7,16 +7,12 @@ const habits = [
 ];
 
 const Main = () => {
-  const handleClick = (e: React.MouseEvent) => {
-    console.log(e.target);
-  };
-
   return (
     <div className="main">
       <h1>July</h1>
       <section className="habits">
         {habits.map((habit) => (
-          <Habit key={habit.id} item={habit.item} dates={habit.dates} onClick={handleClick} />
+          <Habit key={habit.id} item={habit.item} dates={habit.dates} />
         ))}
       </section>
     </div>
