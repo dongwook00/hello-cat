@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Nav.css';
 
 const Nav = () => {
@@ -19,8 +20,12 @@ const Nav = () => {
         </li>
       </ul>
       <div className="nav-submenu">
-        <button role="button">Log in</button>
-        <button role="button">Sign up</button>
+        <Link to="/login">
+          <button role="button">Log in</button>
+        </Link>
+        <Link to="/signup">
+          <button role="button">Sign up</button>
+        </Link>
       </div>
     </nav>
   );
