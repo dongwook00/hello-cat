@@ -3,8 +3,9 @@ import './SignUp.css';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 interface IFormInput {
-  firstName: string;
-  lastName: string;
+  userEmail: string;
+  password: string;
+  confirmPassword: string;
 }
 
 const SignUp = () => {
@@ -22,16 +23,23 @@ const SignUp = () => {
       <h5>Sign Up</h5>
       <form className="signup-form" onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group">
-          <label>First Name</label>
-          <input {...register('firstName', { required: true, maxLength: 20 })} />
-          {errors.firstName && 'Fisrt name is required'}
+          <label>Email</label>
+          <input {...register('userEmail', { required: true, maxLength: 20 })} />
+          {errors.userEmail && <label className="error-message">Fisrt name is required</label>}
         </div>
 
         <div className="form-group">
-          <label>Last Name</label>
-          <input {...register('lastName', { required: true, pattern: /^[A-Za-z]+$/i })} />
-          {errors.lastName && 'Last name is required'}
+          <label>Password</label>
+          <input {...register('password', { required: true, pattern: /^[A-Za-z]+$/i })} />
+          {errors.password && <label className="error-message">Last name is required</label>}
         </div>
+
+        <div className="form-group">
+          <label>Confirm Password</label>
+          <input {...register('confirmPassword', { required: true, pattern: /^[A-Za-z]+$/i })} />
+          {errors.confirmPassword && <label className="error-message">Last name is required</label>}
+        </div>
+
         <button type="submit">Submit</button>
       </form>
     </div>
