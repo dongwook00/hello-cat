@@ -23,20 +23,32 @@ const SignUp = () => {
       <h5>Sign Up</h5>
       <form className="signup-form" onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group">
-          <label>Email</label>
-          <input {...register('userEmail', { required: true, maxLength: 20 })} />
+          <label htmlFor="user-email">Email</label>
+          <input
+            id="user-email"
+            type="text"
+            {...register('userEmail', { required: true, maxLength: 20 })}
+          />
           {errors.userEmail && <label className="error-message">Fisrt name is required</label>}
         </div>
 
         <div className="form-group">
-          <label>Password</label>
-          <input {...register('password', { required: true, pattern: /^[A-Za-z]+$/i })} />
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="text"
+            {...register('password', { required: true, pattern: /^[A-Za-z]+$/i })}
+          />
           {errors.password && <label className="error-message">Last name is required</label>}
         </div>
 
         <div className="form-group">
-          <label>Confirm Password</label>
-          <input {...register('confirmPassword', { required: true, pattern: /^[A-Za-z]+$/i })} />
+          <label htmlFor="confirm-password">Confirm Password</label>
+          <input
+            id="confirm-password"
+            type="text"
+            {...register('confirmPassword', { required: true, pattern: /^[A-Za-z]+$/i })}
+          />
           {errors.confirmPassword && <label className="error-message">Last name is required</label>}
         </div>
 
