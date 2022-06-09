@@ -27,9 +27,13 @@ const SignUp = () => {
           <input
             id="user-email"
             type="text"
-            {...register('userEmail', { required: true, maxLength: 20 })}
+            {...register('userEmail', { required: true, maxLength: 2, pattern: /^[A-Za-z]+$/i })}
           />
-          {errors.userEmail && <label className="error-message">Fisrt name is required</label>}
+          {errors.userEmail && (
+            <label htmlFor="user-email" role="alert" className="error-message">
+              Fisrt name is required
+            </label>
+          )}
         </div>
 
         <div className="form-group">
@@ -39,7 +43,11 @@ const SignUp = () => {
             type="text"
             {...register('password', { required: true, pattern: /^[A-Za-z]+$/i })}
           />
-          {errors.password && <label className="error-message">Last name is required</label>}
+          {errors.password && (
+            <label htmlFor="password" role="alert" className="error-message">
+              Last name is required
+            </label>
+          )}
         </div>
 
         <div className="form-group">
@@ -49,7 +57,11 @@ const SignUp = () => {
             type="text"
             {...register('confirmPassword', { required: true, pattern: /^[A-Za-z]+$/i })}
           />
-          {errors.confirmPassword && <label className="error-message">Last name is required</label>}
+          {errors.confirmPassword && (
+            <label htmlFor="confirm-password" role="alert" className="error-message">
+              Last name is required
+            </label>
+          )}
         </div>
 
         <button type="submit">Submit</button>
