@@ -13,7 +13,7 @@ const SignUp = () => {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<IFormInput>();
+  } = useForm<IFormInput>({ mode: 'onBlur' });
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     console.log(data);
   };
@@ -29,9 +29,24 @@ const SignUp = () => {
             type="text"
             {...register('userEmail', { required: true, maxLength: 2, pattern: /^[A-Za-z]+$/i })}
           />
-          {errors.userEmail && (
+          {errors.userEmail?.type === 'required' && (
+            <label
+              aria-label="Email is required"
+              htmlFor="user-email"
+              role="alert"
+              className="error-message"
+            >
+              Email is required
+            </label>
+          )}
+          {errors.userEmail?.type === 'pattern' && (
             <label htmlFor="user-email" role="alert" className="error-message">
-              Fisrt name is required
+              pattern error
+            </label>
+          )}
+          {errors.userEmail?.type === 'maxLength' && (
+            <label htmlFor="user-email" role="alert" className="error-message">
+              Maxlength
             </label>
           )}
         </div>
