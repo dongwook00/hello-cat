@@ -16,7 +16,7 @@ test('renders correctly', () => {
   expect(confirmPasswordLabel).toBeInTheDocument();
 });
 
-test('input test', async () => {
+test('An error message appears on empty email form', async () => {
   const user = userEvent.setup();
   render(<SignUp />);
 
@@ -24,6 +24,17 @@ test('input test', async () => {
   const password = screen.getByLabelText('Password');
   await user.click(email);
   await user.click(password);
-  const error = screen.getByRole('alert', { name: 'Email is required' });
-  expect(error).toBeInTheDocument();
+  expect(screen.getByRole('alert', { name: 'Email is required' })).toBeInTheDocument();
+});
+
+test('An error message appears on wrong email pattern', async () => {
+  const user = userEvent.setup();
+  render(<SignUp />);
+
+  const email = screen.getByLabelText('Email');
+  const password = screen.getByLabelText('Password');
+  await user.click(email);
+  await user.keyboard('helloworld');
+  await user.click(password);
+  expect(screen.getByRole('alert', { name: 'Your email is not correct!' })).toBeInTheDocument();
 });

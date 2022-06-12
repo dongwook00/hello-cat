@@ -27,7 +27,11 @@ const SignUp = () => {
           <input
             id="user-email"
             type="text"
-            {...register('userEmail', { required: true, maxLength: 2, pattern: /^[A-Za-z]+$/i })}
+            {...register('userEmail', {
+              required: true,
+              pattern:
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            })}
           />
           {errors.userEmail?.type === 'required' && (
             <label
