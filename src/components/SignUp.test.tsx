@@ -38,3 +38,62 @@ test('An error message appears on wrong email pattern', async () => {
   await user.click(password);
   expect(screen.getByRole('alert', { name: 'Your email is not correct!' })).toBeInTheDocument();
 });
+
+test('Check whether input satisfies password conditions', async () => {
+  const user = userEvent.setup();
+  render(<SignUp />);
+  const password = screen.getByLabelText('Password');
+
+  await user.click(password);
+  await user.keyboard('abcA#hell1');
+  // password is validate!
+});
+
+test('Password should be more than 8 characters', async () => {
+  const user = userEvent.setup();
+  render(<SignUp />);
+  const password = screen.getByLabelText('Password');
+  const guide = screen.getByTestId('password-guide-length');
+
+  await user.click(password);
+  await user.keyboard('abcdefg');
+  expect(guide).toHaveStyle('background-color: grey');
+  await user.keyboard('edd');
+  expect(guide).toHaveStyle('background-color: blue');
+});
+
+test('Password should include one special character', async () => {
+  const user = userEvent.setup();
+  render(<SignUp />);
+  const password = screen.getByLabelText('Password');
+  const guide = screen.getByTestId('password-guide-special-character');
+
+  await user.click(password);
+  await user.keyboard('hello@');
+
+  expect(guide).toHaveStyle('background-color: blue');
+});
+
+test('Password should include at least one number', async () => {
+  const user = userEvent.setup();
+  render(<SignUp />);
+  const password = screen.getByLabelText('Password');
+  const guide = screen.getByTestId('password-guide-number');
+
+  await user.click(password);
+  await user.keyboard('hello1');
+
+  expect(guide).toHaveStyle('background-color: blue');
+});
+
+test('Password should be mixed upper and lowercase', async () => {
+  const user = userEvent.setup();
+  render(<SignUp />);
+  const password = screen.getByLabelText('Password');
+  const guide = screen.getByTestId('password-guide-mixed-upper-and-lowercase');
+
+  await user.click(password);
+  await user.keyboard('Hello');
+
+  expect(guide).toHaveStyle('background-color: blue');
+});

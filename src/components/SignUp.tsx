@@ -60,11 +60,27 @@ const SignUp = () => {
           <input
             id="password"
             type="text"
-            {...register('password', { required: true, pattern: /^[A-Za-z]+$/i })}
+            {...register('password', {
+              required: true,
+              validate: {
+                isNumber: (v) => /(?=.*[0-9])/.test(v),
+                isSpecialCharacter: (v) => /(?=.*[!@#$%^&*])/.test(v),
+              },
+            })}
           />
-          {errors.password && (
+          {errors.password?.type === 'required' && (
             <label htmlFor="password" role="alert" className="error-message">
-              Last name is required
+              Password is required
+            </label>
+          )}
+          {errors.password?.type === 'isNumber' && (
+            <label htmlFor="password" role="alert" className="error-message">
+              IsNumber
+            </label>
+          )}
+          {errors.password?.type === 'isSpecialCharacter' && (
+            <label htmlFor="password" role="alert" className="error-message">
+              isSpecialCharacter
             </label>
           )}
         </div>
