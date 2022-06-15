@@ -27,6 +27,17 @@ test('An error message appears on empty email form', async () => {
   expect(screen.getByRole('alert', { name: 'Email is required' })).toBeInTheDocument();
 });
 
+test('An error message appears on empty password form', async () => {
+  const user = userEvent.setup();
+  render(<SignUp />);
+
+  const password = screen.getByLabelText('Password');
+  const email = screen.getByLabelText('Email');
+  await user.click(password);
+  await user.click(email);
+  expect(screen.getByRole('alert', { name: 'Password is required' })).toBeInTheDocument();
+});
+
 test('An error message appears on wrong email pattern', async () => {
   const user = userEvent.setup();
   render(<SignUp />);
@@ -49,30 +60,30 @@ test('Check whether input satisfies password conditions', async () => {
   // password is validate!
 });
 
-test('Password should be more than 8 characters', async () => {
-  const user = userEvent.setup();
-  render(<SignUp />);
-  const password = screen.getByLabelText('Password');
-  const guide = screen.getByTestId('password-guide-length');
+// test('Password should be more than 8 characters', async () => {
+//   const user = userEvent.setup();
+//   render(<SignUp />);
+//   const password = screen.getByLabelText('Password');
+//   const guide = screen.getByTestId('password-guide-length');
 
-  await user.click(password);
-  await user.keyboard('abcdefg');
-  expect(guide).toHaveStyle('background-color: grey');
-  await user.keyboard('edd');
-  expect(guide).toHaveStyle('background-color: blue');
-});
+//   await user.click(password);
+//   await user.keyboard('abcdefg');
+//   expect(guide).toHaveStyle('background-color: grey');
+//   await user.keyboard('edd');
+//   expect(guide).toHaveStyle('background-color: blue');
+// });
 
-test('Password should include one special character', async () => {
-  const user = userEvent.setup();
-  render(<SignUp />);
-  const password = screen.getByLabelText('Password');
-  const guide = screen.getByTestId('password-guide-special-character');
+// test('Password should include one special character', async () => {
+//   const user = userEvent.setup();
+//   render(<SignUp />);
+//   const password = screen.getByLabelText('Password');
+//   const guide = screen.getByTestId('password-guide-special-character');
 
-  await user.click(password);
-  await user.keyboard('hello@');
+//   await user.click(password);
+//   await user.keyboard('hello@');
 
-  expect(guide).toHaveStyle('background-color: blue');
-});
+//   expect(guide).toHaveStyle('background-color: blue');
+// });
 
 test('Password should include at least one number', async () => {
   const user = userEvent.setup();

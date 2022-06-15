@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import './SignUp.css';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
@@ -13,7 +13,8 @@ const SignUp = () => {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<IFormInput>({ mode: 'onBlur' });
+  } = useForm<IFormInput>({ mode: 'all' });
+
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     console.log(data);
   };
@@ -44,13 +45,13 @@ const SignUp = () => {
             </label>
           )}
           {errors.userEmail?.type === 'pattern' && (
-            <label htmlFor="user-email" role="alert" className="error-message">
-              pattern error
-            </label>
-          )}
-          {errors.userEmail?.type === 'maxLength' && (
-            <label htmlFor="user-email" role="alert" className="error-message">
-              Maxlength
+            <label
+              aria-label="Your email is not correct!"
+              htmlFor="user-email"
+              role="alert"
+              className="error-message"
+            >
+              Your email is not correct!
             </label>
           )}
         </div>
@@ -62,6 +63,14 @@ const SignUp = () => {
             type="text"
             {...register('password', {
               required: true,
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                const value = e.target.value;
+                const hasValue = /(?=.*[0-9])/.test(value);
+                const isSpecialCharacter = /(?=.*[!@#$%^&*])/.test(value);
+
+                console.log('hasValue', hasValue);
+                console.log('isSpecialCharacter', isSpecialCharacter);
+              },
               validate: {
                 isNumber: (v) => /(?=.*[0-9])/.test(v),
                 isSpecialCharacter: (v) => /(?=.*[!@#$%^&*])/.test(v),
@@ -69,32 +78,13 @@ const SignUp = () => {
             })}
           />
           {errors.password?.type === 'required' && (
-            <label htmlFor="password" role="alert" className="error-message">
+            <label
+              aria-label="Password is required"
+              htmlFor="password"
+              role="alert"
+              className="error-message"
+            >
               Password is required
-            </label>
-          )}
-          {errors.password?.type === 'isNumber' && (
-            <label htmlFor="password" role="alert" className="error-message">
-              IsNumber
-            </label>
-          )}
-          {errors.password?.type === 'isSpecialCharacter' && (
-            <label htmlFor="password" role="alert" className="error-message">
-              isSpecialCharacter
-            </label>
-          )}
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="confirm-password">Confirm Password</label>
-          <input
-            id="confirm-password"
-            type="text"
-            {...register('confirmPassword', { required: true, pattern: /^[A-Za-z]+$/i })}
-          />
-          {errors.confirmPassword && (
-            <label htmlFor="confirm-password" role="alert" className="error-message">
-              Last name is required
             </label>
           )}
         </div>
