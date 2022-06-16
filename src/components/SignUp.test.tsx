@@ -11,9 +11,6 @@ test('renders correctly', () => {
 
   const passwordLabel = screen.getByLabelText('Password');
   expect(passwordLabel).toBeInTheDocument();
-
-  const confirmPasswordLabel = screen.getByLabelText('Confirm Password');
-  expect(confirmPasswordLabel).toBeInTheDocument();
 });
 
 test('An error message appears on empty email form', async () => {
@@ -60,51 +57,72 @@ test('Check whether input satisfies password conditions', async () => {
   // password is validate!
 });
 
-// test('Password should be more than 8 characters', async () => {
-//   const user = userEvent.setup();
-//   render(<SignUp />);
-//   const password = screen.getByLabelText('Password');
-//   const guide = screen.getByTestId('password-guide-length');
+test('Password should be more than 8 characters', async () => {
+  const user = userEvent.setup();
+  render(<SignUp />);
+  const password = screen.getByLabelText('Password');
+  const passwordRequirements = screen.getByTestId('password-requirements-length');
+  await user.click(password);
 
-//   await user.click(password);
-//   await user.keyboard('abcdefg');
-//   expect(guide).toHaveStyle('background-color: grey');
-//   await user.keyboard('edd');
-//   expect(guide).toHaveStyle('background-color: blue');
-// });
+  // Fail
+  await user.keyboard('abcdef');
+  expect(passwordRequirements).toHaveClass('password-requirements-fail');
 
-// test('Password should include one special character', async () => {
-//   const user = userEvent.setup();
-//   render(<SignUp />);
-//   const password = screen.getByLabelText('Password');
-//   const guide = screen.getByTestId('password-guide-special-character');
+  // Pass
+  await user.keyboard('ghi');
+  expect(passwordRequirements).toHaveClass('password-requirements-pass');
+});
 
-//   await user.click(password);
-//   await user.keyboard('hello@');
+test('Password should include one special character', async () => {
+  const user = userEvent.setup();
+  render(<SignUp />);
+  const password = screen.getByLabelText('Password');
+  const passwordRequirements = screen.getByTestId('password-requirements-special-character');
+  await user.click(password);
 
-//   expect(guide).toHaveStyle('background-color: blue');
-// });
+  // Fail
+  await user.keyboard('abcd');
+  expect(passwordRequirements).toHaveClass('password-requirements-fail');
+  expect(passwordRequirements).not.toHaveClass('password-requirements-pass');
+
+  // Pass
+  await user.keyboard('@');
+  expect(passwordRequirements).toHaveClass('password-requirements-pass');
+  expect(passwordRequirements).not.toHaveClass('password-requirements-fail');
+});
 
 test('Password should include at least one number', async () => {
   const user = userEvent.setup();
   render(<SignUp />);
   const password = screen.getByLabelText('Password');
-  const guide = screen.getByTestId('password-guide-number');
-
+  const passwordRequirements = screen.getByTestId('password-requirements-number');
   await user.click(password);
-  await user.keyboard('hello1');
 
-  expect(guide).toHaveStyle('background-color: blue');
+  // Fail
+  await user.keyboard('hello');
+  expect(passwordRequirements).toHaveClass('password-requirements-fail');
+  expect(passwordRequirements).not.toHaveClass('password-requirements-pass');
+
+  // Pass
+  await user.keyboard('1');
+  expect(passwordRequirements).toHaveClass('password-requirements-pass');
+  expect(passwordRequirements).not.toHaveClass('password-requirements-fail');
 });
 
 test('Password should be mixed upper and lowercase', async () => {
   const user = userEvent.setup();
   render(<SignUp />);
   const password = screen.getByLabelText('Password');
-  const guide = screen.getByTestId('password-guide-mixed-upper-and-lowercase');
-
+  const passwordRequirements = screen.getByTestId('password-requirements-upper-lower-case');
   await user.click(password);
-  await user.keyboard('Hello');
 
-  expect(guide).toHaveStyle('background-color: blue');
+  // Fail
+  await user.keyboard('hello');
+  expect(passwordRequirements).toHaveClass('password-requirements-fail');
+  expect(passwordRequirements).not.toHaveClass('password-requirements-pass');
+
+  // Pass
+  await user.keyboard('A');
+  expect(passwordRequirements).toHaveClass('password-requirements-pass');
+  expect(passwordRequirements).not.toHaveClass('password-requirements-fail');
 });
