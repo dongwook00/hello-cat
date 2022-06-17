@@ -1,4 +1,5 @@
-import React, { SyntheticEvent } from 'react';
+import React, { useState } from 'react';
+import classNames from 'classnames';
 import './SignUp.css';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
@@ -14,6 +15,7 @@ const SignUp = () => {
     formState: { errors },
     handleSubmit,
   } = useForm<IFormInput>({ mode: 'all' });
+  const [minLength, setMinLength] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     console.log(data);
@@ -65,11 +67,18 @@ const SignUp = () => {
               required: true,
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                 const value = e.target.value;
+                const minLength = value.length >= 8;
                 const hasValue = /(?=.*[0-9])/.test(value);
                 const isSpecialCharacter = /(?=.*[!@#$%^&*])/.test(value);
 
-                console.log('hasValue', hasValue);
-                console.log('isSpecialCharacter', isSpecialCharacter);
+                if (minLength) {
+                  setMinLength(true);
+                } else {
+                  setMinLength(false);
+                }
+
+                // console.log('hasValue', hasValue);
+                // console.log('isSpecialCharacter', isSpecialCharacter);
               },
               validate: {
                 isNumber: (v) => /(?=.*[0-9])/.test(v),
@@ -87,6 +96,24 @@ const SignUp = () => {
               Password is required
             </label>
           )}
+          <p
+            data-testid="password-requirements-length"
+            className={classNames({
+              'password-requirements-fail': !minLength,
+              'password-requirements-pass': minLength,
+            })}
+          >
+            Password should be more than 8 characters
+          </p>
+          <p data-testid="password-requirements" className="password-conditd-requirements-fail">
+            Password should include one special character
+          </p>
+          <p data-testid="password-requirements" className="password-conditd-requirements-fail">
+            Password should include at least one number
+          </p>
+          <p data-testid="password-requirements" className="password-conditd-requirements-fail">
+            Password should be mixed upper and lowercase
+          </p>
         </div>
 
         <button type="submit">Submit</button>

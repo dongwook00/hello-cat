@@ -18,3 +18,11 @@
 .error-message {
   color: red;
 }
+
+.password-requirements-pass {
+  color: royalblue;
+}
+
+.password-requirements-fail {
+  color: gray;
+}
