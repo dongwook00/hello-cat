@@ -83,12 +83,10 @@ test('Password should include one special character', async () => {
   // Fail
   await user.keyboard('abcd');
   expect(passwordRequirements).toHaveClass('password-requirements-fail');
-  expect(passwordRequirements).not.toHaveClass('password-requirements-pass');
 
   // Pass
   await user.keyboard('@');
   expect(passwordRequirements).toHaveClass('password-requirements-pass');
-  expect(passwordRequirements).not.toHaveClass('password-requirements-fail');
 });
 
 test('Password should include at least one number', async () => {
@@ -113,7 +111,7 @@ test('Password should be mixed upper and lowercase', async () => {
   const user = userEvent.setup();
   render(<SignUp />);
   const password = screen.getByLabelText('Password');
-  const passwordRequirements = screen.getByTestId('password-requirements-upper-lower-case');
+  const passwordRequirements = screen.getByTestId('password-requirements-mixed');
   await user.click(password);
 
   // Fail

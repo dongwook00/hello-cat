@@ -15,7 +15,11 @@ const SignUp = () => {
     formState: { errors },
     handleSubmit,
   } = useForm<IFormInput>({ mode: 'all' });
+
   const [minLength, setMinLength] = useState<boolean>(false);
+  const [hasSpecialCharacter, setHasSpecialCharacter] = useState<boolean>(false);
+  const [hasValue, setHasValue] = useState<boolean>(false);
+  const [hasMixed, setHasMixed] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     console.log(data);
@@ -68,8 +72,11 @@ const SignUp = () => {
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                 const value = e.target.value;
                 const minLength = value.length >= 8;
-                const hasValue = /(?=.*[0-9])/.test(value);
+                const includesValue = /(?=.*[0-9])/.test(value);
                 const isSpecialCharacter = /(?=.*[!@#$%^&*])/.test(value);
+                const mixedLowerAndUpperCase = /(?=.*[a-z])(?=.*[A-Z])/.test(value);
+
+                // TODO: no whitesplace is allowed
 
                 if (minLength) {
                   setMinLength(true);
@@ -77,8 +84,23 @@ const SignUp = () => {
                   setMinLength(false);
                 }
 
-                // console.log('hasValue', hasValue);
-                // console.log('isSpecialCharacter', isSpecialCharacter);
+                if (isSpecialCharacter) {
+                  setHasSpecialCharacter(true);
+                } else {
+                  setHasSpecialCharacter(false);
+                }
+
+                if (includesValue) {
+                  setHasValue(true);
+                } else {
+                  setHasValue(false);
+                }
+
+                if (mixedLowerAndUpperCase) {
+                  setHasMixed(true);
+                } else {
+                  setHasMixed(false);
+                }
               },
               validate: {
                 isNumber: (v) => /(?=.*[0-9])/.test(v),
@@ -105,13 +127,34 @@ const SignUp = () => {
           >
             Password should be more than 8 characters
           </p>
-          <p data-testid="password-requirements" className="password-conditd-requirements-fail">
+
+          <p
+            data-testid="password-requirements-special-character"
+            className={classNames({
+              'password-requirements-fail': !hasSpecialCharacter,
+              'password-requirements-pass': hasSpecialCharacter,
+            })}
+          >
             Password should include one special character
           </p>
-          <p data-testid="password-requirements" className="password-conditd-requirements-fail">
+
+          <p
+            data-testid="password-requirements-number"
+            className={classNames({
+              'password-requirements-fail': !hasValue,
+              'password-requirements-pass': hasValue,
+            })}
+          >
             Password should include at least one number
           </p>
-          <p data-testid="password-requirements" className="password-conditd-requirements-fail">
+
+          <p
+            data-testid="password-requirements-mixed"
+            className={classNames({
+              'password-requirements-fail': !hasMixed,
+              'password-requirements-pass': hasMixed,
+            })}
+          >
             Password should be mixed upper and lowercase
           </p>
         </div>
