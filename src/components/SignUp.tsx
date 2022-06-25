@@ -16,6 +16,8 @@ const SignUp = () => {
     handleSubmit,
   } = useForm<IFormInput>({ mode: 'all' });
 
+  const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
+  const [isVaildPassword, setIsValidPassword] = useState<boolean>(false);
   const [minLength, setMinLength] = useState<boolean>(false);
   const [hasSpecialCharacter, setHasSpecialCharacter] = useState<boolean>(false);
   const [hasValue, setHasValue] = useState<boolean>(false);
@@ -36,6 +38,18 @@ const SignUp = () => {
             type="text"
             {...register('userEmail', {
               required: true,
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                const value = e.target.value;
+                const isValid =
+                  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+                    value,
+                  );
+                if (isValid) {
+                  setIsValidEmail(true);
+                } else {
+                  setIsValidEmail(false);
+                }
+              },
               pattern:
                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             })}
@@ -76,8 +90,6 @@ const SignUp = () => {
                 const isSpecialCharacter = /(?=.*[!@#$%^&*])/.test(value);
                 const mixedLowerAndUpperCase = /(?=.*[a-z])(?=.*[A-Z])/.test(value);
 
-                // TODO: no whitesplace is allowed
-
                 if (minLength) {
                   setMinLength(true);
                 } else {
@@ -101,10 +113,15 @@ const SignUp = () => {
                 } else {
                   setHasMixed(false);
                 }
-              },
-              validate: {
-                isNumber: (v) => /(?=.*[0-9])/.test(v),
-                isSpecialCharacter: (v) => /(?=.*[!@#$%^&*])/.test(v),
+
+                const isPasswordValid =
+                  minLength && isSpecialCharacter && includesValue && mixedLowerAndUpperCase;
+
+                if (isPasswordValid) {
+                  setIsValidPassword(true);
+                } else {
+                  setIsValidPassword(false);
+                }
               },
             })}
           />
@@ -159,7 +176,9 @@ const SignUp = () => {
           </p>
         </div>
 
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={!isValidEmail || !isVaildPassword}>
+          Submit
+        </button>
       </form>
     </div>
   );
