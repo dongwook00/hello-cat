@@ -11,6 +11,9 @@ test('renders correctly', () => {
 
   const passwordLabel = screen.getByLabelText('Password');
   expect(passwordLabel).toBeInTheDocument();
+
+  const submitButton = screen.getByRole('button', { name: /submit/i });
+  expect(submitButton).toBeDisabled();
 });
 
 test('An error message appears on empty email form', async () => {
@@ -123,4 +126,19 @@ test('Password should be mixed upper and lowercase', async () => {
   await user.keyboard('A');
   expect(passwordRequirements).toHaveClass('password-requirements-pass');
   expect(passwordRequirements).not.toHaveClass('password-requirements-fail');
+});
+
+test('Submit button is enabled when an email and password have correct', async () => {
+  const user = userEvent.setup();
+  render(<SignUp />);
+  const email = screen.getByLabelText('Email');
+  const password = screen.getByLabelText('Password');
+  const submitButton = screen.getByRole('button', { name: /submit/i });
+
+  await user.click(email);
+  await user.keyboard('hello@gmail.com');
+  await user.click(password);
+  await user.keyboard('Helloworld!23');
+
+  expect(submitButton).toBeEnabled();
 });
